@@ -1,0 +1,79 @@
+Alergia: 
+    Lagrimeo
+    Estornudos
+Asma: 
+    Dificultad respiratoria
+    Tos
+Diabetes: 
+    Hambre 
+    Fatiga
+Herpes: 
+    Ardor área genital
+    Úlceras
+    Fiebre
+    Dolor de cabeza
+Hepatitis: 
+    Fatiga
+    Fiebre
+    Náuseas
+Gastroenteritis: 
+    Fatiga
+    Fiebre
+    Dolor de cabeza
+    Náuseas
+Otitis: 
+    Fiebre
+    Dolor de oído
+Bronquitis: 
+    Fiebre
+    Fatiga
+    Dificultad respiratoria
+Gripe: 
+    Fatiga
+    Estornudos
+    Tos
+    Congestión nasal
+Conjuntivitis: 
+    Lagrimeo
+    Ardor en los ojos
+    Secreción ocular
+Resfriado:
+    Tos
+    Estornudos
+    Congestión nasal
+Sinusitis: 
+    Fiebre
+    Dolor en los ojos
+    Congestión nasal
+    Dolor de cabeza
+Faringitis: 
+    Dolor de oído
+    Fiebre
+    Dolor al deglutir
+Bronquiolitis: 
+    Tos
+    Fatiga
+    Fiebre
+    Dificultad respiratoria
+Intoxicación:
+    Náuseas
+    Fatiga
+    Fiebre
+..............................
+..............................
+Lagrimeo (2)
+Estornudos (3)
+Dificultad respiratoria (3)
+Dolor
+    cabeza(3)
+    de oído (2)
+    al deglutir (1)
+Úlceras (1)
+Fiebre (8)
+Fatiga (6) 
+Náuseas(2)
+Tos (4)
+Congestión nasal (3)
+Ardor       
+    área genital (1) 
+    ojos(1)
