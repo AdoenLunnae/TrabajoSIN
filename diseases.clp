@@ -8,9 +8,6 @@
     (disease
         (name diabetes) 
         (symptoms "hambre" "fatiga"))
-    (disease
-        (name gonorrea) 
-        (symptoms "dolor al orinar", "secreciones de pus", "hinchazon en testículos"))
     (disease 
         (name herpes) 
         (symptoms "ardor area genital" "ulceras" "fiebre" "dolor de cabeza"))
@@ -19,8 +16,7 @@
         (symptoms "fatiga" "fiebre" "dolor abdominal" "nauseas"))
     (disease
         (name gastroenteritis) 
-        Fatiga
-        (symptoms "fiebre" "dolor de cabeza" "nauseas"))
+        (symptoms "fatiga" "fiebre" "dolor de cabeza" "nauseas"))
     (disease
         (name otitis)
         (symptoms "fiebre" "dolor de oido" "irritabilidad"))
