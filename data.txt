@@ -36,7 +36,6 @@ Gripe:
 Conjuntivitis: 
     Lagrimeo
     Ardor en los ojos
-    Secreción ocular
 Resfriado:
     Tos
     Estornudos
