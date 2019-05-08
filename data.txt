@@ -42,7 +42,6 @@ Resfriado:
     Congestión nasal
 Sinusitis: 
     Fiebre
-    Dolor en los ojos
     Congestión nasal
     Dolor de cabeza
 Faringitis: 
