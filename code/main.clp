@@ -52,7 +52,7 @@
         (symptoms "nauseas" "fatiga" "fiebre"))
 )
 (deffacts symptom_list
-    (symptoms "lagrimeo" "estornudos" "dicultad respiratoria" "dolor de cabeza" "dolor de oido"
+    (symptoms "lagrimeo" "estornudos" "dificultad respiratoria" "dolor de cabeza" "dolor de oido"
     "dolor al deglutir" "ulceras" "fiebre" "fatiga" "nauseas" "tos" "congestion nasal" 
     "ardor area genital" "ardor en los ojos")
 )
@@ -64,8 +64,11 @@
 (defglobal ?*answerVariable* = nil)
 
 
-(deffacts createTarget
-    (target) 
+(deffacts result
+    (target)
+    (highest 0.0 none)
+    (second 0.0 none)
+    (third 0.0 none)
 )
 
 (deffunction printMenu ()
@@ -134,23 +137,54 @@
 
 (defrule assignProbability
     ?f<-(goToCheck)
-    ?d<-(disease (name ?n) (symptoms $?s) (checked 0))
+    ?d<-(disease (name ?n) (symptoms $?symptoms) (checked 0))
     (target $?list)
+    ?h<-(highest ?p1 ?d1)
+    ?s<-(second ?p2 ?d2)
+    ?t<-(third ?p3 ?d3)
 =>
     (bind ?count 0)
     (loop-for-count (?i (length$ ?list)) do
-        (if (member$ (nth ?i ?list) ?s) then
+        (if (member$ (nth ?i ?list) ?symptoms) then
             (bind ?count (+ 1 ?count))
         )
     )
     (retract ?d)
-    (assert (disease (name ?n) (symptoms ?s) (probability (/ ?count (length$ ?s))) (checked 1)))
+    (bind ?prob (/ ?count (length$ ?symptoms)))
+    (assert (disease (name ?n) (symptoms ?symptoms) (probability ?prob) (checked 1)))
+    (if (> ?prob ?p1) then
+        (retract ?h)
+        (retract ?s)
+        (retract ?t)
+        (assert (highest ?prob ?n))
+        (assert (second ?p1 ?d1))
+        (assert (third ?p2 ?d2))
+    else
+        (if (> ?prob ?p2) then
+            (retract ?s)
+            (retract ?t)
+            (assert (second ?prob ?n))
+            (assert (third ?p2 ?d2))   
+        else
+            (if (> ?prob ?p3) then
+                (retract ?t)
+                (assert (third ?prob ?n))
+            )
+        )
+
+    )
 )
 
 (defrule showResult
     (declare (salience -1000))
     ?f<-(goToCheck)
+    (highest ?p1 ?d1)
+    (second ?p2 ?d2)
+    (third ?p3 ?d3)
 =>
     (retract ?f)
-    (printout t "FAKE RESULT" crlf)
+    (printout t "The results are:" crlf)
+    (printout t "1. " ?d1 " with a probability of " ?p1 crlf)
+    (printout t "2. " ?d2 " with a probability of " ?p2 crlf)
+    (printout t "3. " ?d3 " with a probability of " ?p3 crlf)
 )
