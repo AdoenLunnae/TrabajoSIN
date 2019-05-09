@@ -1,9 +1,17 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;; DEFINICIÓN DE PLANTILLAS Y HECHOS DEL DOMINIO  ;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+; PLANTILLA DE ENFERMEDAD
 (deftemplate disease
     (slot name (type SYMBOL)(default ?NONE))
     (multislot symptoms)
     (slot probability (type FLOAT)(default 0.0))
     (slot checked (type INTEGER) (default 0))
 )
+
+; ENFERMEDADES DE LA BASE DE DATOS
 (deffacts disease_list
     (disease 
         (name alergia) 
@@ -51,6 +59,8 @@
         (name intoxicacion)
         (symptoms "nauseas" "fatiga" "fiebre"))
 )
+
+; SÍNTOMAS RECONOCIDOS
 (deffacts symptom_list
     (symptoms "lagrimeo" "estornudos" "dificultad respiratoria" "dolor de cabeza" "dolor de oido"
     "dolor al deglutir" "ulceras" "fiebre" "fatiga" "nauseas" "tos" "congestion nasal" 
@@ -60,8 +70,6 @@
 (deffacts initialFacts
     (mainMenu)
 )
-
-(defglobal ?*answerVariable* = nil)
 
 
 (deffacts result
@@ -102,16 +110,23 @@
     (symptoms $?valid)
 =>
     (retract ?f)
-    (printout t "Introduce symptom (lowercase and between double quotes):" crlf)
-    (bind ?*answerVariable* (read))
-    (if (not (member$ ?*answerVariable* ?valid)) then
+    (printout t "Introduce symptom (lowercase and between double quotes):" crlf) 
+    ;; Algunos síntomas tienen varias palabras, por lo que el valor debe ser una cadena
+    
+    (bind ?response (read))
+    
+    ;; Comprobamos si el síntoma es parte de los que el programa reconoce
+
+    (if (not (member$ ?response ?valid)) then
         (printout t "That symptom is not valid" crlf)
     else
-        (if (member$ ?*answerVariable* ?symptoms) then
+
+    ;; Comprobamos si el síntoma ha sido introducido antes
+        (if (member$ ?response ?symptoms) then
             (printout t "That symptom has already been introduced" crlf)
         else
             (retract ?s)
-            (assert (target ?*answerVariable* ?symptoms))
+            (assert (target ?response ?symptoms))
         )
     )
     (assert (mainMenu))
@@ -123,6 +138,8 @@
 =>
     (retract ?f)
     (retract ?s)
+
+    ;; Como el último síntoma introducido es el primero de la lista, con (rest$) lo ignoramos
     (assert (target (rest$ ?symptoms)))
     (assert (mainMenu))
 )
@@ -139,19 +156,25 @@
     ?f<-(goToCheck)
     ?d<-(disease (name ?n) (symptoms $?symptoms) (checked 0))
     (target $?list)
+
+    ;; Hechos para controlar qué enfermedades se muestran tras la finalización
     ?h<-(highest ?p1 ?d1)
     ?s<-(second ?p2 ?d2)
     ?t<-(third ?p3 ?d3)
 =>
+    ;; Contamos el número de síntomas de la enfermedad que están presentes
     (bind ?count 0)
     (loop-for-count (?i (length$ ?list)) do
         (if (member$ (nth ?i ?list) ?symptoms) then
             (bind ?count (+ 1 ?count))
         )
     )
+
     (retract ?d)
     (bind ?prob (/ ?count (length$ ?symptoms)))
     (assert (disease (name ?n) (symptoms ?symptoms) (probability ?prob) (checked 1)))
+    
+    ;; Reasignamos los 3 hechos de control si es necesario
     (if (> ?prob ?p1) then
         (retract ?h)
         (retract ?s)
